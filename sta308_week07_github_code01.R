@@ -95,7 +95,18 @@ glimpse(all_crashes_list[[1]]$Results[[1]])
 first_rec <- all_crashes_list[[1]]$Results[[1]] %>%
   slice(1)
 
+first_rec
+first_rec$CrashDate
 
+## We just need to extract the important parts from this "date" string
+str_sub(first_rec$CrashDate, start=7, end=16)
+
+## Turn it into a number
+as.numeric(str_sub(first_rec$CrashDate, start=7, end=16))
+
+## Now, turn into a date:
+library(lubridate)
+as_datetime(as.numeric(str_sub(first_rec$CrashDate, start=7, end=16)))
 
 #################################################
 ## Now we automate the process
@@ -115,6 +126,7 @@ get_county_date_fatalities <- function(x) {
 }
 
 county_year_data_list <- lapply(all_crashes_list, get_county_date_fatalities)
+class(county_year_data_list)
 
 county_year_data <- bind_rows(county_year_data_list)
 glimpse(county_year_data)
